@@ -1,0 +1,34 @@
+# Frozen Qwen2-VL + trainable adapters + bipartite GNN (or linear head)
+encoders:
+  clip:
+    enabled: false
+  dino:
+    enabled: false
+
+graph:
+  variant: bipartite
+
+gnn:
+  type: bipartite_native
+  layers:
+    - in_dim: 512
+      out_dim: 512
+      heads: 1
+      dropout: 0.2
+    - in_dim: 512
+      out_dim: 256
+      heads: 1
+      dropout: 0.2
+  dropout: 0.2
+
+xray_vlm:
+  enabled: true
+  model_id: Qwen/Qwen2-VL-2B-Instruct
+  # Leave empty to resolve data/hf_cache/models--Qwen--Qwen2-VL-2B-Instruct/snapshots/<hash>
+  snapshot_path: ""
+  prompt_template: "chest X-ray showing {finding}"
+  gnn_dim: 512
+  train_edge_mode: positive_only
+  eval_edge_mode: full_bipartite
+  head: gnn
+

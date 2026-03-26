@@ -1,0 +1,32 @@
+run:
+  seed: 42
+  deterministic: true
+  experiment_name: xray_qwen_vlm_gnn
+  output_dir: outputs
+
+training:
+  stage1:
+    enabled: true
+    epochs: 5
+    freeze_encoders: true
+    lr_head: 0.0003
+    lr_encoder: 0.0
+  stage2:
+    enabled: false
+    epochs: 0
+    freeze_encoders: true
+    unfreeze_top_n_layers: 0
+    lr_head: 0.0
+    lr_encoder: 0.0
+
+optimization:
+  optimizer: adamw
+  weight_decay: 0.0001
+  grad_clip_norm: 1.0
+  gradient_accumulation_steps: 1
+  mixed_precision: false
+
+batching:
+  batch_size: 2
+  eval_batch_size: 2
+

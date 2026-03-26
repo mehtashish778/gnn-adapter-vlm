@@ -1,0 +1,14 @@
+# CheXpert (local) — use with configs/model_xray_vlm_gnn.yaml, train_xray.yaml, eval.yaml
+dataset:
+  name: chexpert_xray
+  loader: multi_label_local
+  root_dir: data/raw/raw
+  processed_dir: data/processed/xray
+  num_workers: 4
+  pin_memory: true
+
+processing:
+  label_vocab_file: label_vocab.json
+  label_frequency_file: label_frequencies.json
+  split_dir: splits
+

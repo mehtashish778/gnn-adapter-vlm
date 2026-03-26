@@ -1,0 +1,52 @@
+evaluation:
+  split: val
+  threshold:
+    strategy: fixed
+    value: 0.5
+
+metrics:
+  classification:
+    - map
+    - macro_f1
+    - micro_f1
+    - per_attribute_ap
+    - per_attribute_f1
+  calibration:
+    enabled: false
+    bins: 15
+    metrics:
+      - ece
+  embedding:
+    enabled: true
+    retrieval_k:
+      - 1
+      - 5
+      - 10
+    compute_silhouette: true
+
+visualization:
+  umap:
+    enabled: true
+    n_neighbors: 15
+    min_dist: 0.1
+    random_state: 42
+  tsne:
+    enabled: false
+    perplexity: 30
+    random_state: 42
+
+error_analysis:
+  enabled: true
+  top_k_false_positives: 20
+  top_k_false_negatives: 20
+  analyze_by_frequency_bucket: true
+  confusion_focus_groups:
+    - color
+    - material
+    - condition
+
+reporting:
+  save_predictions: true
+  save_embeddings: true
+  output_dir: reports/eval
+

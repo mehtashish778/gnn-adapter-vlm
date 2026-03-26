@@ -1,0 +1,13 @@
+defaults:
+  dataset_config: configs/dataset_xray.yaml
+  train_config: configs/train_xray.yaml
+  eval_config: configs/eval.yaml
+
+runs:
+  - name: smoke_xray_vlm_linear
+    mode: smoke
+    model_config: configs/model_xray_vlm_linear.yaml
+  - name: smoke_xray_vlm_gnn
+    mode: smoke
+    model_config: configs/model_xray_vlm_gnn.yaml
+
