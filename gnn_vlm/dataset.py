@@ -145,6 +145,7 @@ def collate_samples(batch: List[Dict[str, Any]]) -> Dict[str, Any]:
         "images": [item["image"] for item in batch],
         "targets": torch.stack([item["target"] for item in batch], dim=0),
         "image_ids": [item["image_id"] for item in batch],
+        "image_paths": [item.get("image_path", "") for item in batch],
         "labels": [item["labels"] for item in batch],
     }
     out["target_mask"] = torch.stack([item["target_mask"] for item in batch], dim=0)
@@ -301,6 +302,7 @@ class MultiLabelImageDataset(Dataset):
             "target": target,
             "target_mask": target_mask,
             "image_id": int(image_id),
+            "image_path": str(self._resolve_image_path(row)),
             "labels": labels_out,
         }
 

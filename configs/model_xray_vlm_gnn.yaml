@@ -29,6 +29,7 @@ xray_vlm:
   prompt_template: "chest X-ray showing {finding}"
   gnn_dim: 512
   train_edge_mode: positive_only
-  eval_edge_mode: full_bipartite
+  eval_edge_mode: ontology_weighted
+  ontology_path: data/processed/xray/hallucination_ontology.json
   head: gnn
 

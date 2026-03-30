@@ -6,6 +6,7 @@ from typing import Any, Dict, List
 import torch
 import torch.nn as nn
 
+from .dataset import load_json
 from .graph_models import NativeGNNClassifier
 from .qwen_vlm_encoders import FrozenQwen2VLEncoder, VLMAdapterStack
 
@@ -41,6 +42,24 @@ def build_xray_vlm_modules(
         attr_cached = adapters.proj_attr(z_txt)
 
     head = str(xv.get("head", "gnn"))
+    train_edge_mode = str(xv.get("train_edge_mode", "positive_only"))
+    eval_edge_mode = str(xv.get("eval_edge_mode", "full_bipartite"))
+    ontology_payload: Dict[str, Any] | None = None
+    if train_edge_mode == "ontology_weighted" or eval_edge_mode == "ontology_weighted":
+        ontology_path = Path(
+            str(
+                xv.get("ontology_path")
+                or (repo_root / "data" / "processed" / "xray" / "hallucination_ontology.json")
+            )
+        )
+        if not ontology_path.is_absolute():
+            ontology_path = repo_root / ontology_path
+        if not ontology_path.exists():
+            raise FileNotFoundError(
+                f"ontology_weighted requested but ontology file not found: {ontology_path}"
+            )
+        ontology_payload = load_json(ontology_path)
+
     linear_head: nn.Linear | None = None
     gnn_model: NativeGNNClassifier | None = None
     if head == "linear":
@@ -64,7 +83,8 @@ def build_xray_vlm_modules(
         "linear_head": linear_head,
         "attr_cached": attr_cached,
         "head": head,
-        "train_edge_mode": str(xv.get("train_edge_mode", "positive_only")),
-        "eval_edge_mode": str(xv.get("eval_edge_mode", "full_bipartite")),
+        "train_edge_mode": train_edge_mode,
+        "eval_edge_mode": eval_edge_mode,
+        "ontology": ontology_payload,
     }
 

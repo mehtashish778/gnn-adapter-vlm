@@ -205,6 +205,7 @@ def run_eval_xray(
                     targets=targets,
                     attr_feats=attr,
                     edge_mode=edge_mode,
+                    ontology=pack.get("ontology"),
                 )
                 logits = gnn_model(graph)
 
@@ -317,6 +318,7 @@ def train() -> None:
                     targets=targets,
                     attr_feats=attr,
                     edge_mode=pack["train_edge_mode"],
+                    ontology=pack.get("ontology"),
                 )
                 logits = pack["gnn_model"](graph)
 
